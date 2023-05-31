@@ -1,17 +1,16 @@
 require('dotenv').config();
 const express = require('express');
-const mongo = require('mongodb');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const validURL = require('valid-url');
 const shortID = require('shortid');
+const mongo = require('mongodb');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const app = express();
 
 // Basic Configuration
 const port = process.env.PORT || 3002;
 
-// MongoDB and mongoose connect
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -28,12 +27,13 @@ const URL = mongoose.model('URL', urlSchema);
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/public', express.static(`${process.cwd()}/public`));
-app.get('/', function(req, res) {
-  res.sendFile(process.cwd() + '/views/index.html');
+app.get('/', function (req, res) {
+  res.sendFile(`${process.cwd()}/views/index.html`);
 });
 
+// Your first API endpoint
 // Response for POST request
-app.post('/api/shorturl/new', async (req, res) => {
+app.post('/api/shorturl/', async (req, res) => {
   const { url } = req.body;
   const shortURL = shortID.generate();
   console.log(validURL.isUri(url));
